@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 // Admin List
-exports.user_list = (req, res, next) => {
+exports.admin_user_list = (req, res, next) => {
     User.find({})
       .then(user => {
         newdata = {};
@@ -30,7 +30,7 @@ exports.user_list = (req, res, next) => {
 };
   
 // Admin Edit
-exports.user_edit = (req, res, next) => {
+exports.admin_user_edit = (req, res, next) => {
 User.findOneAndUpdate({_id: req.params.userId}, req.body)
     .exec()
     .then(user => {
@@ -47,7 +47,7 @@ User.findOneAndUpdate({_id: req.params.userId}, req.body)
 };
 
 // Admin Delete
-exports.user_delete = (req, res, next) => {
+exports.admin_user_delete = (req, res, next) => {
 User.find({_id: req.params.userId})
     .exec()
     .then(user => {
