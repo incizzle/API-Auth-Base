@@ -117,7 +117,8 @@ exports.user_me = (req, res, next) => {
         _id: user[0]._id,
         firstname: user[0].firstname,
         lastname: user[0].lastname,
-        email: user[0].email
+        email: user[0].email,
+        role: user[0].role
       })
     })
     .catch(err => {
