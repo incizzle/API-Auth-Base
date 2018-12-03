@@ -1,0 +1,5 @@
+{
+    "mongodb": "mongodb://HOSTNAME:PORT/DATABASE",
+    "jwt_secret": "SuperSecureSecret",
+    "port": 8080
+}

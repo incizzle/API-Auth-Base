@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
+const config = require('../../config.json')
 
 module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
-        const decoded = jwt.verify(token, "5Fp1PF3Y896NXQVu");
+        const decoded = jwt.verify(token, config.jwt_secret);
         req.userData = decoded;
         if (decoded.role === 'admin') {
             next();

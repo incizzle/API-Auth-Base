@@ -3,15 +3,12 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const config = require('./config.json')
 
 const userRoutes = require('./api/routes/user');
 const adminRouter = require('./api/routes/admin')
 
-mongoose.connect(
-    "mongodb://192.168.0.18:27017/SchoolVPN", 
-    { useNewUrlParser: true }
-  );
-
+mongoose.connect(config.mongodb, { useNewUrlParser: true, useCreateIndex: true});
 mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'))
