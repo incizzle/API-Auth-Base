@@ -103,13 +103,6 @@ exports.user_login = (req, res, next) => {
     });
 };
 
-// Test Endpoint
-exports.user_test = (req, res, next) => {
-  res.status(200).json({
-    message: "Hello World!"
-  })
-};
-
 // User Info
 exports.user_me = (req, res, next) => {
   User.find({_id: req.userData.userId})

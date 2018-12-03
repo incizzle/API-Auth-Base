@@ -10,8 +10,6 @@ router.post("/signup", UserController.user_signup);
 
 router.post("/login", UserController.user_login);
 
-router.get("/test", checkAdminAuth, UserController.user_test);
-
 router.get("/me", checkIsOwner, UserController.user_me);
 
 router.put("/me", checkIsOwner, UserController.user_editme);
