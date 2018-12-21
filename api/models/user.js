@@ -2,13 +2,29 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
+    createdAt: {
+        type: Date,
+        required: true
+    },
+    lastloginAt: {
+        type: Date
+    },
+    updatedAt: {
+        type: Date
+    },
+    picture: {
+        type: String
+    },
+    role: {
+        type: String
+    }, 
     firstname: {
         type: String,
-        required: true,
+        required: true
     },
     lastname: {
         type: String,
-        required: true,
+        required: true
     },
     email: { 
         type: String, 
@@ -20,9 +36,6 @@ const userSchema = mongoose.Schema({
         type: String, 
         required: true,
         match: /.{3,}/ 
-    },
-    role: {
-        type: String,
     }
 });
 

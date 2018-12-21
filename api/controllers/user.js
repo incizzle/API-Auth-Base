@@ -32,17 +32,21 @@ exports.user_signup = (req, res, next) => {
           } else {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
+              createdAt: new Date(),
+              lastloginAt: undefined,
+              updatedAt: undefined,
+              picture: "https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-fill-circle-512.png",
+              role: "user",
               firstname: req.body.firstname,
               lastname: req.body.lastname,
               email: req.body.email,
-              password: hash,
-              role: "user"
+              password: hash
             });
             user
               .save()
               .then(result => {
                 res.status(201).json({
-                  message: "Account Account Created"
+                  message: "Account Successfully Created"
                 });
               })
               .catch(err => {
@@ -74,11 +78,18 @@ exports.user_login = (req, res, next) => {
           });
         }
         if (result) {
+          User.findOneAndUpdate({_id: user[0]._id}, {lastloginAt: new Date()})
+            .then(user => {
+              res.status(200).json({
+                message: 'Account Eddited'
+              })
+            })
           const token = jwt.sign(
             {
               email: user[0].email,
               userId: user[0]._id,
-              role: user[0].role
+              role: user[0].role,
+              lastloginAt: user[0].lastloginAt
             },
             config.jwt_secret,
             {
@@ -109,10 +120,14 @@ exports.user_me = (req, res, next) => {
     .then(user => {
       res.status(200).json({
         _id: user[0]._id,
+        createdAt: user[0].createdAt,
+        lastloginAt: user[0].lastloginAt,
+        updatedAt: user[0].updatedAt,
+        picture: user[0].picture,
+        role: user[0].role,
         firstname: user[0].firstname,
         lastname: user[0].lastname,
-        email: user[0].email,
-        role: user[0].role
+        email: user[0].email
       })
     })
     .catch(err => {
@@ -126,12 +141,37 @@ exports.user_me = (req, res, next) => {
 // User Edit
 exports.user_editme = (req, res, next) => {
   if (req.body.role !== undefined) {
+      res.status(401).json({
+        message: "Cannot Change role"
+      });
+  }
+  else if (req.body._id !== undefined) {
+      res.status(401).json({
+          message: "Cannot Change _id"
+        });
+  }
+  else if (req.body.createdAt !== undefined) {
+      res.status(401).json({
+          message: "Cannot Change createdAt"
+        });
+  }
+  else if (req.body.password !== undefined) {
+      res.status(401).json({
+          message: "Cannot Change password"
+        });
+  }
+  else if (req.body.lastloginAt !== undefined) {
     res.status(401).json({
-      message: "Cannot Change Role"
-    });
+        message: "Cannot Change lastloginAt"
+      });
+  }
+  else if (req.body.lastloginAt !== undefined) {
+    res.status(401).json({
+        message: "Cannot Change lastloginAt"
+      });
   }
   else {
-    User.findOneAndUpdate({_id: req.userData.userId}, req.body)
+    User.findOneAndUpdate({_id: req.userData.userId}, req.body && {updatedAt: new Date()})
     .then(user => {
       res.status(200).json({
         message: 'Account Eddited'
