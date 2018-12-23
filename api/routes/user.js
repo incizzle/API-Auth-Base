@@ -14,4 +14,6 @@ router.get("/me", checkIsOwner, UserController.user_me);
 
 router.put("/me", checkIsOwner, UserController.user_editme);
 
+router.post("/changepassword", checkIsOwner, UserController.user_changepassword);
+
 module.exports = router;

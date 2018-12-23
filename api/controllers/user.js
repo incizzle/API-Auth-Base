@@ -17,7 +17,7 @@ exports.user_signup = (req, res, next) => {
         });
       } 
       // Password Length Check
-      if (req.body.password <= 3) {
+      if (req.body.password.length <= 3) {
         return res.status(409).json({
           message: "Password Must Be Longer Than 3 Characters"
         })
@@ -79,27 +79,23 @@ exports.user_login = (req, res, next) => {
         }
         if (result) {
           User.findOneAndUpdate({_id: user[0]._id}, {lastloginAt: new Date()})
-            .then(user => {
-              res.status(200).json({
-                message: 'Account Eddited'
-              })
-            })
-          const token = jwt.sign(
-            {
-              email: user[0].email,
-              userId: user[0]._id,
-              role: user[0].role,
-              lastloginAt: user[0].lastloginAt
-            },
-            config.jwt_secret,
-            {
-              expiresIn: "1d"
-            }
-          );
-          return res.status(200).json({
-            message: "Auth Successful",
-            token: token
-          });
+            .then()
+            const token = jwt.sign(
+              {
+                email: user[0].email,
+                userId: user[0]._id,
+                role: user[0].role,
+                lastloginAt: user[0].lastloginAt
+              },
+              config.jwt_secret,
+              {
+                expiresIn: "1d"
+              }
+            );
+            return res.status(200).json({
+              message: "Auth Successful",
+              token: token
+            });
         }
         res.status(401).json({
           message: "Auth Failed"
@@ -186,4 +182,40 @@ exports.user_editme = (req, res, next) => {
       });
     })
   }
+};
+
+exports.user_changepassword = (req, res, next) => {
+  User.find({ _id: req.userData.userId })
+    .exec()
+    .then(user => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          message: "Auth Failed"
+        });
+      }
+      bcrypt.compare(req.body.oldpassword, user[0].password, (err, result) => {
+        if (!result) {
+          return res.status(401).json({
+            message: "oldpassword Does not match"
+          });
+        }
+        if (result) {
+          if (req.body.newpassword.length <= 3) {
+            res.status(401).json({
+              message: "Password must be longer than 3 characters"
+            })
+          }
+          else {
+            bcrypt.hash(req.body.newpassword, 10, (err, hash) => {
+              User.findOneAndUpdate({_id: req.userData.userId}, {password: hash})
+              .then(
+                res.status(200).json({
+                  message: "Password Changed"
+                })
+              );
+            })
+          }
+        }
+      })
+  })
 };
