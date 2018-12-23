@@ -171,7 +171,9 @@ exports.user_editme = (req, res, next) => {
       });
   }
   else {
-    User.findOneAndUpdate({_id: req.userData.userId}, req.body && {updatedAt: new Date()})
+    var request = req.body
+    request.updatedAt = new Date()
+    User.findOneAndUpdate({_id: req.userData.userId}, request)
     .then(user => {
       res.status(200).json({
         message: 'Account Eddited'
