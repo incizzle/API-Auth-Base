@@ -165,7 +165,7 @@ exports.user_editme = (req, res, next) => {
         message: "Cannot Change lastloginAt"
       });
   }
-  else if (req.body.lastloginAt !== undefined) {
+  else if (req.body.updatedAt !== undefined) {
     res.status(401).json({
         message: "Cannot Change lastloginAt"
       });
