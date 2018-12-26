@@ -12,10 +12,15 @@ exports.admin_user_list = (req, res, next) => {
         for (const s in user) {
           const data = user[s]
           newdata[data._id] = {
+            _id: data._id,
+            createdAt: data.createdAt,
+            lastloginAt: data.lastloginAt,
+            updatedAt: data.updatedAt,
+            picture: data.picture,
+            role: data.role,
             firstname: data.firstname,
             lastname: data.lastname,
             email: data.email,
-            role: data.role,
             password: data.password
           };
         }
