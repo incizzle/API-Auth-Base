@@ -4,7 +4,6 @@ const router = express.Router();
 var ExpressBrute = require('express-brute');
 var MongooseStore = require('express-brute-mongoose');
 var bruteSchema = require('../models/brute');
-var mongoose = require('mongoose');
 var store = new MongooseStore(bruteSchema);
 var bruteforce = new ExpressBrute(store);
 
