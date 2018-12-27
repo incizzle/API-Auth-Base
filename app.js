@@ -3,6 +3,7 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+var compression = require('compression')
 const config = require('./config.json')
 
 const userRoutes = require('./api/routes/user');
@@ -11,6 +12,7 @@ const adminRouter = require('./api/routes/admin')
 mongoose.connect(config.mongodb, { useNewUrlParser: true, useCreateIndex: true});
 mongoose.Promise = global.Promise;
 
+app.use(compression())
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -41,6 +43,7 @@ app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({
       error: {
+        code: error.status,
         message: error.message
       }
     });
